@@ -51,7 +51,7 @@ function onSave({ front, back }) {
 async function onLoad() {
   const uid = new URL(location.href).searchParams.get('id') || '';
   if (uid) {
-    const req = await fetch(new URL('/api/deck/' + uid, env.value!.API_HOST));
+    const req = await fetch(new URL('/deck/' + uid, env.value!.API_HOST));
     quizSource.value = await req.json();
   }
 }
