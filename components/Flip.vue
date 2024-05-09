@@ -18,7 +18,7 @@
       <div class="flipper__nav">
         <button @click="prevCard()" class="btn">
           <svg
-            class="w-12 h-12"
+            class="btn__icon"
             alt="Previous"
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -34,7 +34,7 @@
 
         <button @click="shuffle()" class="btn">
           <svg
-            class="w-12 h-12"
+            class="btn__icon"
             alt="Shuffle"
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -50,7 +50,7 @@
 
         <button v-if="speech" @click="speak()" class="btn">
           <svg
-            class="w-12 h-12"
+            class="btn__icon"
             alt="Speak"
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -65,7 +65,7 @@
 
         <button v-if="favorites" @click="save()" class="btn">
           <svg
-            class="w-12 h-12"
+            class="btn__icon"
             alt="Save"
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -80,7 +80,7 @@
 
         <button @click="nextCard()" class="btn">
           <svg
-            class="w-12 h-12"
+            class="btn__icon"
             alt="Next"
             xmlns="http://www.w3.org/2000/svg"
             height="24"
