@@ -20,6 +20,5 @@ const routes = {
 };
 
 export default function (request, response, next) {
-  router(routes, () => next());
-  next();
+  router(routes, () => next())(request, response);
 }

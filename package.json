@@ -3,7 +3,6 @@
   "private": true,
   "type": "module",
   "prettier": "@cloud-cli/prettier-config",
-  "main": "./server/index.mjs",
   "scripts": {
     "build": "vite build",
     "test": "echo true",
