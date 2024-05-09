@@ -92,6 +92,7 @@ const showTranslation = ref(false);
 
 const props = defineProps({
   speech: { type: Boolean },
+  language: { type: String, default: 'en' },
   cards: {
     type: Array,
     default: () => [],
@@ -115,8 +116,9 @@ function shuffle() {
 function speak() {
   const card = props.cards[index.value];
   const text = showTranslation.value ? card.back : card.front;
+  const language = showTranslation.value ? 'en' : props.language;
 
-  emit('speak', text);
+  emit('speak', { text, language });
 }
 
 function flip() {
