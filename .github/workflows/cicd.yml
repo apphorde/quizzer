@@ -11,6 +11,6 @@ jobs:
     with:
       name: apphorde/quizzer
       baseImage: cloud-cli/node:latest
-      type: node
+      type: vite
       withSha: false
       withTag: true
