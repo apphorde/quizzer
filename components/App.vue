@@ -1,5 +1,5 @@
 <template>
-  <div class="w-screen h-screen bg-tertiary app">
+  <div class="app">
     <Flip
       :cards="deck"
       :speech="canSpeak"
