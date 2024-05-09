@@ -31,6 +31,7 @@ type FlipCard = {
 const [canSpeak, speak] = useSpeech();
 const [quizSource, refreshCards] = useData<QuizSource>(`/assets/nl-words.json`);
 const deck = ref<FlipCard[]>([]);
+const [env, loadEnv] = useData<Record<string, any>>('/.env');
 
 function onShuffle() {
   if (!quizSource.value) return;
@@ -44,18 +45,19 @@ function onSpeak({ text, language }) {
 }
 
 function onSave({ front, back }) {
-  fetch('/api/fav/' + [front, back].join(','), { method: 'POST' });
+  fetch(new URL('/fav/' + [front, back].join(':'), env.value!.API_HOST), { method: 'POST' });
 }
 
 async function onLoad() {
   const uid = new URL(location.href).searchParams.get('id') || '';
   if (uid) {
-    const req = await fetch('/api/deck/' + uid);
+    const req = await fetch(new URL('/api/deck/' + uid, env.value!.API_HOST));
     quizSource.value = await req.json();
   }
 }
 
 onMounted(async () => {
+  await loadEnv();
   await refreshCards();
   await onLoad();
   onShuffle();
