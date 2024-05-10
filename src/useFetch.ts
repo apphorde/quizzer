@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 
-export function useFetch<T, U = any>(getArgs: (a?: U) => null | Parameters<typeof fetch>) {
-  const value = ref<T | null>(null);
+export function useFetch<T, U = any>(getArgs: (a?: U) => null | Parameters<typeof fetch>, initialValue?: T) {
+  const value = ref<T | null>(initialValue || null);
 
   const refresh = async (a: U) => {
     const args = getArgs(a);

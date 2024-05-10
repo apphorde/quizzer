@@ -1,10 +1,6 @@
 import { env } from './env';
 import { useFetch } from './useFetch';
 
-export function useDeckList() {
-  return useFetch(() => [new URL('/deck', env.API_HOST)]);
-}
-
 export interface Source {
   language: string;
   name: string;
@@ -14,6 +10,14 @@ export interface Source {
 export interface Card {
   front: string;
   back: string;
+}
+
+interface Deck {
+  name: string;
+}
+
+export function useDeckList() {
+  return useFetch<Deck[], void>(() => [new URL('/deck', env.API_HOST)], []);
 }
 
 export function useDeck() {

@@ -202,7 +202,7 @@ function handleKeyDown(event) {
   }
 
   if (event.key === 's' || event.key === 'ArrowDown') {
-    flip();
+    showTranslation.value ? unflip() : flip();
   }
 
   if (event.key === 'w' || event.key === 'ArrowUp') {
