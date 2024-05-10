@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <Selector v-if="!selected" @select="onSelect" :options="options" placeholder="Find a quiz" />
-    <Flip :speech="true" :favorites="true" v-else />
+    <Flip :speech="true" :favorites="favoritesId !== selected" v-else />
   </div>
 </template>
 
@@ -9,17 +9,22 @@
 import { computed, onMounted, ref } from 'vue';
 import Flip from './Flip.vue';
 import Selector from './Selector.vue';
-import { useDeckList } from './useApi.js';
+import { useDeckList, favoritesId } from './useApi.js';
 
 const [deckList, refresh] = useDeckList();
-const options = computed(() => deckList.value?.map((deck) => ({ value: deck, label: deck.name })));
+const favoriteItem = [{ value: { name: favoritesId }, label: '★ Saved Words' }];
+const options = computed(() => [
+  ...favoriteItem,
+  ...deckList.value!.map((deck) => ({ value: deck, label: deck.name })),
+]);
 const selected = ref('');
 
-function onSelect({ name }) {
+function onSelect({ name, id }) {
+  const uid = id || name;
   const url = new URL(location.href);
-  url.searchParams.set('id', name);
-  history.pushState({ name: name }, '', url);
-  selected.value = name;
+  url.searchParams.set('id', uid);
+  history.pushState({ name: uid }, '', url);
+  selected.value = uid;
 }
 
 function updateSelected() {

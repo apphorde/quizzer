@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="flipper__nav">
-        <button @click="prevCard()" class="btn">
+        <button @click="prevCard()" class="btn" title="Previous (<-)">
           <svg
             class="btn__icon"
             alt="Previous"
@@ -32,7 +32,7 @@
           </svg>
         </button>
 
-        <button @click="onShuffle()" class="btn">
+        <button @click="onShuffle()" class="btn" title="Shuffle (r)">
           <svg
             class="btn__icon"
             alt="Shuffle"
@@ -48,7 +48,7 @@
           </svg>
         </button>
 
-        <button v-if="speech" @click="onSpeak()" class="btn">
+        <button v-if="speech" @click="onSpeak()" class="btn" title="Speak (p)">
           <svg
             class="btn__icon"
             alt="Speak"
@@ -62,7 +62,7 @@
             />
           </svg>
         </button>
-        <button v-if="favorites" @click="onFavorite()" class="btn">
+        <button v-if="favorites" @click="onFavorite()" class="btn" title="Save it (q)">
           <svg
             class="btn__icon fill-current"
             :class="isFavorite(cards[index]) && 'text-primary'"
@@ -105,7 +105,7 @@ import { Card, useDeck, useFavorites } from './useApi';
 
 const [source, refreshDeck] = useDeck();
 const [_, speak] = useSpeech();
-const { favorites: list, isFavorite, save, refresh: refreshFavorites, remove } = useFavorites();
+const { isFavorite, save, refresh: refreshFavorites, remove } = useFavorites();
 
 const cards = ref<Card[]>([]);
 const index = ref(0);

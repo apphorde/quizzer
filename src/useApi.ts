@@ -20,10 +20,11 @@ export function useDeckList() {
   return useFetch<Deck[], void>(() => [new URL('/deck', env.API_HOST)], []);
 }
 
+export const favoritesId = ':favorites:';
 export function useDeck() {
   return useFetch<Source, void>(() => {
     const uid = new URL(location.href).searchParams.get('id');
-    return !uid ? null : [new URL('/deck/' + uid, env.API_HOST)];
+    return !uid ? null : [new URL(uid === favoritesId ? '/fav' : '/deck/' + uid, env.API_HOST)];
   });
 }
 

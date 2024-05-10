@@ -1,9 +1,8 @@
 <template>
   <div class="selector">
-    <form class="selector__header">
-      <input class="selector__search" type="text" :placeholder="placeholder" name="search" v-model="filter" />
-      <button class="btn sr-only">Search</button>
-    </form>
+    <div class="selector__header">
+      <input class="selector__search" type="text" :placeholder="placeholder" aria-label="Filter options" name="search" v-model="filter" />
+    </div>
     <div class="selector__list">
       <a @click.prevent="onSelect(item)" href="#" class="selector__item" v-for="item of list" :key="item.label">{{
         item.label
