@@ -3,7 +3,10 @@ import { setEnv } from './src/env.js';
 import App from './src/App.vue';
 
 (async function () {
-  const env = await fetch('/.env').then(req => req.json()).catch(() => ({API_HOST: 'https://quizzer-api.apphor.de/'}));
+  const env = await fetch('/.env')
+    .then((req) => req.json())
+    .catch(() => ({}));
+
   setEnv(env);
   createApp(App).mount('#app');
 })();

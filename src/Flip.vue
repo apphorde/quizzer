@@ -146,8 +146,7 @@ function onShuffle() {
 
   if (source.value) {
     const mappedCards: Card[] = (source.value.pairs || []).map(([front, back]) => ({ front, back }));
-    cards.value = mappedCards.slice();
-    //.sort(() => (Math.random() > Math.random() ? 1 : -1));
+    cards.value = mappedCards.slice().sort(() => (Math.random() > Math.random() ? 1 : -1));
   }
 }
 
