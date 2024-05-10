@@ -32,7 +32,7 @@
           </svg>
         </button>
 
-        <button @click="shuffle()" class="btn">
+        <button @click="onShuffle()" class="btn">
           <svg
             class="btn__icon"
             alt="Shuffle"
@@ -48,7 +48,7 @@
           </svg>
         </button>
 
-        <button v-if="speech" @click="speak()" class="btn">
+        <button v-if="speech" @click="onSpeak()" class="btn">
           <svg
             class="btn__icon"
             alt="Speak"
@@ -62,10 +62,10 @@
             />
           </svg>
         </button>
-
-        <button v-if="favorites" @click="save()" class="btn">
+        <button v-if="favorites" @click="onFavorite()" class="btn">
           <svg
-            class="btn__icon"
+            class="btn__icon fill-current"
+            :class="isFavorite(cards[index]) && 'text-primary'"
             alt="Save"
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -98,49 +98,65 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useSpeech } from './useSpeech';
+import { Card, useDeck, useFavorites } from './useApi';
 
+const [source, refreshDeck] = useDeck();
+const [_, speak] = useSpeech();
+const { favorites: list, isFavorite, save, refresh: refreshFavorites, remove } = useFavorites();
+
+const cards = ref<Card[]>([]);
 const index = ref(0);
 const animated = ref(true);
 const showTranslation = ref(false);
 
-const props = defineProps({
-  speech: { type: Boolean },
-  favorites: { type: Boolean },
-  language: { type: String, default: 'en' },
-  cards: {
-    type: Array,
-    default: () => [],
-  },
+interface Props {
+  speech: boolean;
+  favorites: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  speech: false,
+  favorites: false,
 });
 
-const emit = defineEmits(['shuffle', 'speak', 'save']);
-
 function haveValidCards() {
-  return props.cards?.length && Array.isArray(props.cards);
+  return cards.value.length && Array.isArray(cards.value);
 }
 
-function save() {
-  const card = props.cards[index.value];
-  emit('save', card);
+async function onFavorite() {
+  const card = cards.value[index.value];
+
+  if (isFavorite(card)) {
+    await remove(card);
+  } else {
+    await save(card);
+  }
+
+  await refreshFavorites();
 }
 
-function shuffle() {
+function onShuffle() {
   animated.value = false;
   unflip();
   index.value = 0;
   animated.value = true;
 
-  emit('shuffle');
+  if (source.value) {
+    const mappedCards: Card[] = (source.value.pairs || []).map(([front, back]) => ({ front, back }));
+    cards.value = mappedCards.slice();
+    //.sort(() => (Math.random() > Math.random() ? 1 : -1));
+  }
 }
 
-function speak() {
-  const card = props.cards[index.value];
+function onSpeak() {
+  const card = cards.value[index.value];
   const text = showTranslation.value ? card.back : card.front;
-  const language = showTranslation.value ? 'en' : props.language;
+  const language = showTranslation.value ? 'en' : source.value?.language;
 
-  emit('speak', { text, language });
+  speak(text, language);
 }
 
 function flip() {
@@ -158,7 +174,7 @@ function prevCard() {
   if (index.value > 0) {
     index.value--;
   } else {
-    index.value = props.cards.length - 1;
+    index.value = cards.value.length - 1;
   }
 
   setTimeout(() => (animated.value = true));
@@ -168,7 +184,7 @@ function nextCard() {
   animated.value = false;
   unflip();
 
-  if (index.value < props.cards.length - 1) {
+  if (index.value < cards.value.length - 1) {
     index.value++;
   } else {
     index.value = 0;
@@ -195,21 +211,23 @@ function handleKeyDown(event) {
   }
 
   if (event.key === 'r') {
-    shuffle();
+    onShuffle();
   }
 
   if (event.key === 'q') {
-    save();
+    onFavorite();
   }
 
   if (event.key === 'p' && props.speech) {
-    speak();
+    onSpeak();
   }
 }
 
 onMounted(async () => {
   window.addEventListener('keydown', handleKeyDown);
-  shuffle();
+  await refreshDeck();
+  await refreshFavorites();
+  onShuffle();
 });
 
 onBeforeUnmount(() => {
