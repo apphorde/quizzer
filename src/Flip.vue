@@ -78,7 +78,7 @@
           </svg>
         </button>
 
-        <button @click="nextCard()" class="btn">
+        <button @click="nextCard()" class="btn" title="Next (->)">
           <svg
             class="btn__icon"
             alt="Next"

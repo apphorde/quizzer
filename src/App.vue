@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <Selector v-if="!selected" @select="onSelect" :options="options" placeholder="Find a quiz" />
-    <Flip :speech="true" :favorites="favoritesId !== selected" v-else />
+    <Flip :speech="true" :favorites="true" v-else />
   </div>
 </template>
 
