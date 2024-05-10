@@ -1,6 +1,6 @@
 {
-  "short_name": "QuizzApp",
-  "name": "QuizzApp",
+  "short_name": "Quizzer",
+  "name": "Quizzer",
   "icons": [
     {
       "src": "/assets/icon.svg",
