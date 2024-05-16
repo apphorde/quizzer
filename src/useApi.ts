@@ -19,13 +19,18 @@ interface Deck {
 }
 
 export function useDeckList() {
-  const [initial, _, store] = useCache<Deck[]>("decklist");
+  const [initial, _, store] = useCache<Deck[]>("decklist", []);
   const [remote, refresh] = useFetch<Deck[], void>(
     () => [new URL("/deck", env.API_HOST)],
     initial.value
   );
-  watch(remote, (v) => store(v));
-  return [remote, refresh];
+
+  async function refreshAndSave() {
+    await refresh();
+    store(remote.value || []);
+  }
+
+  return [remote, refreshAndSave];
 }
 
 export const favoritesId = ":favorites:";
