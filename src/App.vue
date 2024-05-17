@@ -9,15 +9,15 @@
 import { computed, onMounted, ref } from 'vue';
 import Flip from './Flip.vue';
 import Selector from './Selector.vue';
-import { useDeckList, favoritesId } from './useApi.js';
+import { useDeckList, favoritesId, Deck } from './useApi.js';
 
 const [deckList, refresh] = useDeckList();
-const favoriteItem = [{ value: { name: favoritesId }, label: '★ Saved Words' }];
+const favoriteItem = [{ value: { name: favoritesId }, label: '★ Words to Review ★' }];
+const selected = ref('');
 const options = computed(() => [
   ...favoriteItem,
-  ...deckList.value!.map((deck) => ({ value: deck, label: deck.name })),
+  ...deckList.value!.map((deck: Deck) => ({ value: deck, label: deck.title || deck.name })),
 ]);
-const selected = ref('');
 
 function onSelect({ name, id }) {
   const uid = id || name;

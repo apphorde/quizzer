@@ -14,8 +14,9 @@ export interface Card {
   back: string;
 }
 
-interface Deck {
+export interface Deck {
   name: string;
+  title: string;
 }
 
 export function useDeckList() {
@@ -30,7 +31,7 @@ export function useDeckList() {
     store(remote.value || []);
   }
 
-  return [remote, refreshAndSave];
+  return [remote, refreshAndSave] as const;
 }
 
 export const favoritesId = ":favorites:";
